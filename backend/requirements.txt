@@ -19,7 +19,7 @@ bcrypt==4.1.2
 python-dotenv==1.0.1
 
 # Bank import
-mt940==4.30.0
+mt940==0.7.0
 
 # Scheduling
 APScheduler==3.10.4
