@@ -54,7 +54,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
-    JWT_COOKIE_SECURE = True
+    JWT_COOKIE_SECURE = False  # Set True only with HTTPS
 
 
 class TestingConfig(Config):
