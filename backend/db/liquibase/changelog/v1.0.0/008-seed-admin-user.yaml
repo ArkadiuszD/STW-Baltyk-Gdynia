@@ -22,7 +22,8 @@ databaseChangeLog:
                   value: admin@stwbaltyk.pl
               - column:
                   name: password_hash
-                  value: "scrypt:32768:8:1$0cafbWr4VGXfOKim$1e1dc740673efe9f187cffc11db784eb4784ffbe4c2f6937fa6dedfe3e2c6a9e634691d3daa9ae3f37b388157899e82676e0760d7ed521bf12ed49e8d36d2cf1"
+                  # bcrypt hash for "Admin123" - use set_password() to generate new hashes
+                  value: "$2b$12$8kRTw9n2EqrtDfixOgtCsuD.as7wIcHP/0skYyM14XxJ9IJzFoOfG"
               - column:
                   name: first_name
                   value: Administrator
