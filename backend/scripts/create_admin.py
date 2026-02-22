@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import bcrypt
 from app import create_app, db
 from app.models import User
+from app.models.user import UserRole
 
 
 def create_admin(email, password, first_name, last_name):
@@ -31,7 +32,7 @@ def create_admin(email, password, first_name, last_name):
             password_hash=password_hash,
             first_name=first_name,
             last_name=last_name,
-            role='admin',
+            role=UserRole.ADMIN,
             is_active=True
         )
 
