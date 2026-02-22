@@ -7,8 +7,17 @@ from flask_marshmallow import Marshmallow
 
 import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import config
+
+# Ensure we import config.py from parent directory, not app/config/
+_backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _backend_dir)
+
+# Import config dict from config.py
+import importlib.util
+_spec = importlib.util.spec_from_file_location("config_module", os.path.join(_backend_dir, "config.py"))
+_config_module = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_config_module)
+config = _config_module.config
 
 db = SQLAlchemy()
 migrate = Migrate()
