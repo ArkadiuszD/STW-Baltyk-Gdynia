@@ -1,0 +1,152 @@
+databaseChangeLog:
+  # ============================================================================
+  # Enum Types - PostgreSQL custom types for status and category fields
+  # ============================================================================
+
+  - changeSet:
+      id: enum-001-userrole
+      author: stw-baltyk
+      comment: Create user role enum type
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE userrole AS ENUM ('ADMIN', 'TREASURER', 'BOARD');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS userrole;
+
+  - changeSet:
+      id: enum-002-memberstatus
+      author: stw-baltyk
+      comment: Create member status enum type
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE memberstatus AS ENUM ('ACTIVE', 'SUSPENDED', 'FORMER');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS memberstatus;
+
+  - changeSet:
+      id: enum-003-feestatus
+      author: stw-baltyk
+      comment: Create fee status enum type
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE feestatus AS ENUM ('PENDING', 'PAID', 'OVERDUE', 'CANCELLED');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS feestatus;
+
+  - changeSet:
+      id: enum-004-feefrequency
+      author: stw-baltyk
+      comment: Create fee frequency enum type
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE feefrequency AS ENUM ('YEARLY', 'MONTHLY', 'ONE_TIME');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS feefrequency;
+
+  - changeSet:
+      id: enum-005-transactiontype
+      author: stw-baltyk
+      comment: Create transaction type enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE transactiontype AS ENUM ('INCOME', 'EXPENSE');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS transactiontype;
+
+  - changeSet:
+      id: enum-006-transactioncategory
+      author: stw-baltyk
+      comment: Create transaction category enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE transactioncategory AS ENUM (
+                'FEES', 'DONATIONS', 'GRANTS', 'EVENTS_INCOME', 'EQUIPMENT_RENTAL', 'OTHER_INCOME',
+                'ADMINISTRATION', 'STATUTORY_ACTIVITIES', 'EQUIPMENT_PURCHASE', 'EQUIPMENT_MAINTENANCE',
+                'EVENTS_EXPENSE', 'TRAINING', 'RENT', 'OTHER_EXPENSE'
+              );
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS transactioncategory;
+
+  - changeSet:
+      id: enum-007-equipmenttype
+      author: stw-baltyk
+      comment: Create equipment type enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE equipmenttype AS ENUM ('KAYAK', 'SAILBOAT', 'SUP', 'MOTORBOAT', 'OTHER');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS equipmenttype;
+
+  - changeSet:
+      id: enum-008-equipmentstatus
+      author: stw-baltyk
+      comment: Create equipment status enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE equipmentstatus AS ENUM ('AVAILABLE', 'RESERVED', 'MAINTENANCE', 'RETIRED');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS equipmentstatus;
+
+  - changeSet:
+      id: enum-009-reservationstatus
+      author: stw-baltyk
+      comment: Create reservation status enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE reservationstatus AS ENUM ('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS reservationstatus;
+
+  - changeSet:
+      id: enum-010-eventtype
+      author: stw-baltyk
+      comment: Create event type enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE eventtype AS ENUM ('CRUISE', 'KAYAK_TRIP', 'TRAINING', 'MEETING', 'OTHER');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS eventtype;
+
+  - changeSet:
+      id: enum-011-eventstatus
+      author: stw-baltyk
+      comment: Create event status enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE eventstatus AS ENUM ('PLANNED', 'REGISTRATION_OPEN', 'FULL', 'ONGOING', 'COMPLETED', 'CANCELLED');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS eventstatus;
+
+  - changeSet:
+      id: enum-012-participantstatus
+      author: stw-baltyk
+      comment: Create participant status enum
+      changes:
+        - sql:
+            sql: |
+              CREATE TYPE participantstatus AS ENUM ('REGISTERED', 'WAITLIST', 'CONFIRMED', 'CANCELLED');
+      rollback:
+        - sql:
+            sql: DROP TYPE IF EXISTS participantstatus;

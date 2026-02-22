@@ -1,0 +1,131 @@
+databaseChangeLog:
+  # ============================================================================
+  # Members Table - Association member records
+  # ============================================================================
+
+  - changeSet:
+      id: members-001-create-table
+      author: stw-baltyk
+      comment: Create members table for association members
+      changes:
+        - createTable:
+            tableName: members
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_members
+              - column:
+                  name: member_number
+                  type: varchar(20)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: uq_members_number
+              - column:
+                  name: first_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+              - column:
+                  name: address
+                  type: text
+              - column:
+                  name: join_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: memberstatus
+                  defaultValue: ACTIVE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: data_consent
+                  type: boolean
+                  defaultValueBoolean: false
+              - column:
+                  name: consent_date
+                  type: timestamp
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: members
+
+  - changeSet:
+      id: members-002-create-indexes
+      author: stw-baltyk
+      comment: Create indexes for members table
+      changes:
+        - createIndex:
+            tableName: members
+            indexName: ix_members_email
+            columns:
+              - column:
+                  name: email
+        - createIndex:
+            tableName: members
+            indexName: ix_members_status
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            tableName: members
+            indexName: ix_members_last_name
+            columns:
+              - column:
+                  name: last_name
+      rollback:
+        - dropIndex:
+            indexName: ix_members_email
+            tableName: members
+        - dropIndex:
+            indexName: ix_members_status
+            tableName: members
+        - dropIndex:
+            indexName: ix_members_last_name
+            tableName: members
+
+  - changeSet:
+      id: members-003-add-fk-to-users
+      author: stw-baltyk
+      comment: Add foreign key from users to members
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: member_id
+            referencedTableName: members
+            referencedColumnNames: id
+            constraintName: fk_users_member
+            onDelete: SET NULL
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: users
+            constraintName: fk_users_member

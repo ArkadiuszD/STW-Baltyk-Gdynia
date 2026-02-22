@@ -1,0 +1,88 @@
+databaseChangeLog:
+  # ============================================================================
+  # Users Table - System authentication and authorization
+  # ============================================================================
+
+  - changeSet:
+      id: users-001-create-table
+      author: stw-baltyk
+      comment: Create users table for authentication
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_users
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uq_users_email
+              - column:
+                  name: password_hash
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: userrole
+                  defaultValue: BOARD
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: integer
+              - column:
+                  name: last_login
+                  type: timestamp
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: users
+
+  - changeSet:
+      id: users-002-create-index-email
+      author: stw-baltyk
+      comment: Create index on users email for fast lookups
+      changes:
+        - createIndex:
+            tableName: users
+            indexName: ix_users_email
+            columns:
+              - column:
+                  name: email
+      rollback:
+        - dropIndex:
+            indexName: ix_users_email
+            tableName: users

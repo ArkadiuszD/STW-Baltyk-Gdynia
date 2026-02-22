@@ -1,0 +1,213 @@
+databaseChangeLog:
+  # ============================================================================
+  # Events Tables - Events and participants
+  # ============================================================================
+
+  - changeSet:
+      id: events-001-create-table
+      author: stw-baltyk
+      comment: Create events table for association events
+      changes:
+        - createTable:
+            tableName: events
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_events
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: eventtype
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: location
+                  type: varchar(255)
+              - column:
+                  name: start_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registration_deadline
+                  type: date
+              - column:
+                  name: max_participants
+                  type: integer
+              - column:
+                  name: status
+                  type: eventstatus
+                  defaultValue: PLANNED
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cost
+                  type: decimal(10,2)
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: created_by_id
+                  type: integer
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: events
+
+  - changeSet:
+      id: events-002-create-participants
+      author: stw-baltyk
+      comment: Create event_participants table
+      changes:
+        - createTable:
+            tableName: event_participants
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_event_participants
+              - column:
+                  name: event_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: participantstatus
+                  defaultValue: REGISTERED
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registered_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: notes
+                  type: text
+      rollback:
+        - dropTable:
+            tableName: event_participants
+
+  - changeSet:
+      id: events-003-create-indexes-and-fks
+      author: stw-baltyk
+      comment: Create indexes and foreign keys for events
+      changes:
+        - createIndex:
+            tableName: events
+            indexName: ix_events_type
+            columns:
+              - column:
+                  name: type
+        - createIndex:
+            tableName: events
+            indexName: ix_events_status
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            tableName: events
+            indexName: ix_events_start_date
+            columns:
+              - column:
+                  name: start_date
+        - createIndex:
+            tableName: event_participants
+            indexName: ix_participants_event
+            columns:
+              - column:
+                  name: event_id
+        - createIndex:
+            tableName: event_participants
+            indexName: ix_participants_member
+            columns:
+              - column:
+                  name: member_id
+        - addForeignKeyConstraint:
+            baseTableName: events
+            baseColumnNames: created_by_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_events_created_by
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: event_participants
+            baseColumnNames: event_id
+            referencedTableName: events
+            referencedColumnNames: id
+            constraintName: fk_participants_event
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: event_participants
+            baseColumnNames: member_id
+            referencedTableName: members
+            referencedColumnNames: id
+            constraintName: fk_participants_member
+            onDelete: CASCADE
+      rollback:
+        - dropAllForeignKeyConstraints:
+            baseTableName: events
+        - dropAllForeignKeyConstraints:
+            baseTableName: event_participants
+        - dropIndex:
+            indexName: ix_events_type
+            tableName: events
+        - dropIndex:
+            indexName: ix_events_status
+            tableName: events
+        - dropIndex:
+            indexName: ix_events_start_date
+            tableName: events
+        - dropIndex:
+            indexName: ix_participants_event
+            tableName: event_participants
+        - dropIndex:
+            indexName: ix_participants_member
+            tableName: event_participants
+
+  - changeSet:
+      id: events-004-unique-participant
+      author: stw-baltyk
+      comment: Ensure unique event-member combination
+      changes:
+        - addUniqueConstraint:
+            tableName: event_participants
+            columnNames: event_id, member_id
+            constraintName: uq_event_member
+      rollback:
+        - dropUniqueConstraint:
+            tableName: event_participants
+            constraintName: uq_event_member

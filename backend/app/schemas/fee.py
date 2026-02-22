@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, validate
 
+from app.utils.enums import enum_values, FeeStatus, FeeFrequency
+
 
 class FeeTypeSchema(Schema):
     """Schema for fee type output."""
@@ -19,7 +21,7 @@ class FeeTypeCreateSchema(Schema):
     name = fields.Str(required=True, validate=validate.Length(min=1, max=200))
     amount = fields.Decimal(required=True, as_string=True)
     frequency = fields.Str(required=True,
-                           validate=validate.OneOf(['yearly', 'monthly', 'one_time']))
+                           validate=validate.OneOf(enum_values(FeeFrequency)))
     due_day = fields.Int(validate=validate.Range(min=1, max=31))
     due_month = fields.Int(validate=validate.Range(min=1, max=12))
     is_active = fields.Bool(load_default=True)
@@ -50,6 +52,6 @@ class FeeCreateSchema(Schema):
     fee_type_id = fields.Int(required=True)
     amount = fields.Decimal(required=True, as_string=True)
     due_date = fields.Date(required=True)
-    status = fields.Str(validate=validate.OneOf(['pending', 'paid', 'overdue', 'cancelled']),
-                        load_default='pending')
+    status = fields.Str(validate=validate.OneOf(enum_values(FeeStatus)),
+                        load_default=FeeStatus.PENDING.value)
     notes = fields.Str()

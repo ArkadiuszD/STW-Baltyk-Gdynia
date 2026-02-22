@@ -1,6 +1,8 @@
 from marshmallow import Schema, fields, validate, post_load
 from datetime import date
 
+from app.utils.enums import enum_values, MemberStatus
+
 
 class MemberSchema(Schema):
     """Schema for member output."""
@@ -31,8 +33,8 @@ class MemberCreateSchema(Schema):
     phone = fields.Str(validate=validate.Length(max=20))
     address = fields.Str()
     join_date = fields.Date(load_default=date.today)
-    status = fields.Str(validate=validate.OneOf(['active', 'suspended', 'former']),
-                        load_default='active')
+    status = fields.Str(validate=validate.OneOf(enum_values(MemberStatus)),
+                        load_default=MemberStatus.ACTIVE.value)
     notes = fields.Str()
     data_consent = fields.Bool(load_default=False)
 
@@ -45,6 +47,6 @@ class MemberUpdateSchema(Schema):
     email = fields.Email()
     phone = fields.Str(validate=validate.Length(max=20))
     address = fields.Str()
-    status = fields.Str(validate=validate.OneOf(['active', 'suspended', 'former']))
+    status = fields.Str(validate=validate.OneOf(enum_values(MemberStatus)))
     notes = fields.Str()
     data_consent = fields.Bool()

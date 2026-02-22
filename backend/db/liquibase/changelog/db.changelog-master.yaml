@@ -1,0 +1,47 @@
+databaseChangeLog:
+  # ============================================================================
+  # STW Baltyk Gdynia - Database Changelog Master
+  # ============================================================================
+  # This is the master changelog file that includes all database changes.
+  # Changes are organized by version/release.
+  #
+  # Best Practices:
+  # - Never modify existing changesets after deployment
+  # - Always add new changesets at the end
+  # - Use meaningful IDs: <category>-<sequence>-<description>
+  # - Include rollback statements where possible
+  # - Use preconditions for safety
+  # ============================================================================
+
+  # Version 1.0.0 - Initial Schema
+  - include:
+      file: changelog/v1.0.0/001-create-enums.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/002-create-users.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/003-create-members.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/004-create-fees.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/005-create-transactions.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/006-create-equipment.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/007-create-events.yaml
+      relativeToChangelogFile: false
+
+  - include:
+      file: changelog/v1.0.0/008-seed-admin-user.yaml
+      relativeToChangelogFile: false

@@ -1,0 +1,180 @@
+databaseChangeLog:
+  # ============================================================================
+  # Fees Tables - Fee types and member fees
+  # ============================================================================
+
+  - changeSet:
+      id: fees-001-create-fee-types
+      author: stw-baltyk
+      comment: Create fee_types table for fee definitions
+      changes:
+        - createTable:
+            tableName: fee_types
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_fee_types
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: feefrequency
+                  defaultValue: YEARLY
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_day
+                  type: integer
+              - column:
+                  name: due_month
+                  type: integer
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: fee_types
+
+  - changeSet:
+      id: fees-002-create-fees
+      author: stw-baltyk
+      comment: Create fees table for member fee records
+      changes:
+        - createTable:
+            tableName: fees
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_fees
+              - column:
+                  name: member_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fee_type_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: feestatus
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+              - column:
+                  name: paid_date
+                  type: date
+              - column:
+                  name: transaction_id
+                  type: integer
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: fees
+
+  - changeSet:
+      id: fees-003-create-indexes-and-fks
+      author: stw-baltyk
+      comment: Create indexes and foreign keys for fees
+      changes:
+        - createIndex:
+            tableName: fees
+            indexName: ix_fees_member_id
+            columns:
+              - column:
+                  name: member_id
+        - createIndex:
+            tableName: fees
+            indexName: ix_fees_status
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            tableName: fees
+            indexName: ix_fees_due_date
+            columns:
+              - column:
+                  name: due_date
+        - addForeignKeyConstraint:
+            baseTableName: fees
+            baseColumnNames: member_id
+            referencedTableName: members
+            referencedColumnNames: id
+            constraintName: fk_fees_member
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: fees
+            baseColumnNames: fee_type_id
+            referencedTableName: fee_types
+            referencedColumnNames: id
+            constraintName: fk_fees_fee_type
+            onDelete: RESTRICT
+      rollback:
+        - dropIndex:
+            indexName: ix_fees_member_id
+            tableName: fees
+        - dropIndex:
+            indexName: ix_fees_status
+            tableName: fees
+        - dropIndex:
+            indexName: ix_fees_due_date
+            tableName: fees
+        - dropForeignKeyConstraint:
+            baseTableName: fees
+            constraintName: fk_fees_member
+        - dropForeignKeyConstraint:
+            baseTableName: fees
+            constraintName: fk_fees_fee_type

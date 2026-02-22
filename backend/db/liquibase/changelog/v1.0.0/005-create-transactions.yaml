@@ -1,0 +1,158 @@
+databaseChangeLog:
+  # ============================================================================
+  # Transactions Table - Financial transactions (income/expense)
+  # ============================================================================
+
+  - changeSet:
+      id: transactions-001-create-table
+      author: stw-baltyk
+      comment: Create transactions table for financial records
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_transactions
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: transactiontype
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: transactioncategory
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: counterparty
+                  type: varchar(255)
+              - column:
+                  name: bank_reference
+                  type: varchar(100)
+              - column:
+                  name: matched_member_id
+                  type: integer
+              - column:
+                  name: matched_fee_id
+                  type: integer
+              - column:
+                  name: imported_at
+                  type: timestamp
+              - column:
+                  name: created_by_id
+                  type: integer
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: transactions
+
+  - changeSet:
+      id: transactions-002-create-indexes-and-fks
+      author: stw-baltyk
+      comment: Create indexes and foreign keys for transactions
+      changes:
+        - createIndex:
+            tableName: transactions
+            indexName: ix_transactions_date
+            columns:
+              - column:
+                  name: date
+        - createIndex:
+            tableName: transactions
+            indexName: ix_transactions_type
+            columns:
+              - column:
+                  name: type
+        - createIndex:
+            tableName: transactions
+            indexName: ix_transactions_category
+            columns:
+              - column:
+                  name: category
+        - createIndex:
+            tableName: transactions
+            indexName: ix_transactions_bank_ref
+            columns:
+              - column:
+                  name: bank_reference
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: matched_member_id
+            referencedTableName: members
+            referencedColumnNames: id
+            constraintName: fk_transactions_member
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: matched_fee_id
+            referencedTableName: fees
+            referencedColumnNames: id
+            constraintName: fk_transactions_fee
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: created_by_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_transactions_created_by
+            onDelete: SET NULL
+      rollback:
+        - dropAllForeignKeyConstraints:
+            baseTableName: transactions
+        - dropIndex:
+            indexName: ix_transactions_date
+            tableName: transactions
+        - dropIndex:
+            indexName: ix_transactions_type
+            tableName: transactions
+        - dropIndex:
+            indexName: ix_transactions_category
+            tableName: transactions
+        - dropIndex:
+            indexName: ix_transactions_bank_ref
+            tableName: transactions
+
+  - changeSet:
+      id: transactions-003-add-fk-to-fees
+      author: stw-baltyk
+      comment: Add foreign key from fees to transactions
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: fees
+            baseColumnNames: transaction_id
+            referencedTableName: transactions
+            referencedColumnNames: id
+            constraintName: fk_fees_transaction
+            onDelete: SET NULL
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: fees
+            constraintName: fk_fees_transaction

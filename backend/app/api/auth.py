@@ -42,12 +42,12 @@ def login():
     user.last_login = datetime.utcnow()
     db.session.commit()
 
-    # Create tokens
+    # Create tokens - identity must be a string
     access_token = create_access_token(
-        identity=user.id,
+        identity=str(user.id),
         additional_claims={'role': user.role.value}
     )
-    refresh_token = create_refresh_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=str(user.id))
 
     response = jsonify({
         'access_token': access_token,

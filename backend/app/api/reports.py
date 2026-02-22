@@ -12,6 +12,7 @@ from app.models.member import MemberStatus
 from app.models.fee import FeeStatus
 from app.models.transaction import TransactionType, TransactionCategory
 from app.models.event import EventStatus, ParticipantStatus
+from app.models.equipment import EquipmentStatus
 
 reports_bp = Blueprint('reports', __name__)
 
@@ -284,7 +285,7 @@ def dashboard_data():
     from app.models import Equipment
     maintenance_due = Equipment.query.filter(
         Equipment.next_maintenance <= today,
-        Equipment.status != 'retired'
+        Equipment.status != EquipmentStatus.RETIRED
     ).count()
 
     return jsonify({

@@ -1,0 +1,210 @@
+databaseChangeLog:
+  # ============================================================================
+  # Equipment Tables - Equipment and reservations
+  # ============================================================================
+
+  - changeSet:
+      id: equipment-001-create-table
+      author: stw-baltyk
+      comment: Create equipment table for water sports equipment
+      changes:
+        - createTable:
+            tableName: equipment
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_equipment
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: equipmenttype
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: equipmentstatus
+                  defaultValue: AVAILABLE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: photo_url
+                  type: varchar(500)
+              - column:
+                  name: inventory_number
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: uq_equipment_inventory
+              - column:
+                  name: purchase_date
+                  type: date
+              - column:
+                  name: last_maintenance
+                  type: date
+              - column:
+                  name: next_maintenance
+                  type: date
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: equipment
+
+  - changeSet:
+      id: equipment-002-create-reservations
+      author: stw-baltyk
+      comment: Create reservations table for equipment bookings
+      changes:
+        - createTable:
+            tableName: reservations
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_reservations
+              - column:
+                  name: equipment_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: reservationstatus
+                  defaultValue: PENDING
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purpose
+                  type: varchar(255)
+              - column:
+                  name: notes
+                  type: text
+              - column:
+                  name: created_by_id
+                  type: integer
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: reservations
+
+  - changeSet:
+      id: equipment-003-create-indexes-and-fks
+      author: stw-baltyk
+      comment: Create indexes and foreign keys for equipment and reservations
+      changes:
+        - createIndex:
+            tableName: equipment
+            indexName: ix_equipment_type
+            columns:
+              - column:
+                  name: type
+        - createIndex:
+            tableName: equipment
+            indexName: ix_equipment_status
+            columns:
+              - column:
+                  name: status
+        - createIndex:
+            tableName: reservations
+            indexName: ix_reservations_equipment
+            columns:
+              - column:
+                  name: equipment_id
+        - createIndex:
+            tableName: reservations
+            indexName: ix_reservations_member
+            columns:
+              - column:
+                  name: member_id
+        - createIndex:
+            tableName: reservations
+            indexName: ix_reservations_start_date
+            columns:
+              - column:
+                  name: start_date
+        - addForeignKeyConstraint:
+            baseTableName: reservations
+            baseColumnNames: equipment_id
+            referencedTableName: equipment
+            referencedColumnNames: id
+            constraintName: fk_reservations_equipment
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: reservations
+            baseColumnNames: member_id
+            referencedTableName: members
+            referencedColumnNames: id
+            constraintName: fk_reservations_member
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: reservations
+            baseColumnNames: created_by_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_reservations_created_by
+            onDelete: SET NULL
+      rollback:
+        - dropAllForeignKeyConstraints:
+            baseTableName: reservations
+        - dropIndex:
+            indexName: ix_equipment_type
+            tableName: equipment
+        - dropIndex:
+            indexName: ix_equipment_status
+            tableName: equipment
+        - dropIndex:
+            indexName: ix_reservations_equipment
+            tableName: reservations
+        - dropIndex:
+            indexName: ix_reservations_member
+            tableName: reservations
+        - dropIndex:
+            indexName: ix_reservations_start_date
+            tableName: reservations

@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, validate
 
+from app.utils.enums import enum_values, EventType, EventStatus, ParticipantStatus
+
 
 class EventParticipantSchema(Schema):
     """Schema for event participant output."""
@@ -45,17 +47,14 @@ class EventSchema(Schema):
 class EventCreateSchema(Schema):
     """Schema for creating an event."""
     name = fields.Str(required=True, validate=validate.Length(min=1, max=200))
-    type = fields.Str(required=True, validate=validate.OneOf([
-        'cruise', 'kayak_trip', 'training', 'meeting', 'other'
-    ]))
+    type = fields.Str(required=True, validate=validate.OneOf(enum_values(EventType)))
     description = fields.Str()
     location = fields.Str(validate=validate.Length(max=255))
     start_date = fields.DateTime(required=True)
     end_date = fields.DateTime(required=True)
     registration_deadline = fields.Date()
     max_participants = fields.Int(validate=validate.Range(min=1))
-    status = fields.Str(validate=validate.OneOf([
-        'planned', 'registration_open', 'full', 'ongoing', 'completed', 'cancelled'
-    ]), load_default='planned')
+    status = fields.Str(validate=validate.OneOf(enum_values(EventStatus)),
+                        load_default=EventStatus.PLANNED.value)
     cost = fields.Decimal(as_string=True)
     notes = fields.Str()

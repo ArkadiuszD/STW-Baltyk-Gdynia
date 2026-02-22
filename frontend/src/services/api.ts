@@ -10,20 +10,30 @@ export const api = axios.create({
   withCredentials: true, // For refresh token cookies
 })
 
-// Token storage
-let accessToken: string | null = null
-
+// Token storage - use localStorage for persistence
 export const setAccessToken = (token: string | null) => {
-  accessToken = token
+  console.log('[AUTH] setAccessToken called:', token ? 'TOKEN_SET' : 'TOKEN_CLEARED')
+  if (token) {
+    localStorage.setItem('access_token', token)
+  } else {
+    localStorage.removeItem('access_token')
+  }
 }
 
-export const getAccessToken = () => accessToken
+export const getAccessToken = () => {
+  const token = localStorage.getItem('access_token')
+  console.log('[AUTH] getAccessToken:', token ? 'TOKEN_EXISTS' : 'NO_TOKEN')
+  return token
+}
 
 // Request interceptor - add auth header
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    if (accessToken && config.headers) {
-      config.headers.Authorization = `Bearer ${accessToken}`
+    const token = getAccessToken()
+    console.log('[AUTH] Request interceptor:', config.url, 'token:', token ? 'YES' : 'NO')
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`
+      console.log('[AUTH] Authorization header SET')
     }
     return config
   },
@@ -67,8 +77,11 @@ api.interceptors.response.use(
 // Auth API
 export const authApi = {
   login: async (email: string, password: string) => {
+    console.log('[AUTH] login called')
     const response = await api.post('/auth/login', { email, password })
+    console.log('[AUTH] login response:', response.data.access_token ? 'HAS_TOKEN' : 'NO_TOKEN')
     setAccessToken(response.data.access_token)
+    console.log('[AUTH] token saved to localStorage')
     return response.data
   },
 

@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, validate
 
+from app.utils.enums import enum_values, EquipmentType, EquipmentStatus, ReservationStatus
+
 
 class EquipmentSchema(Schema):
     """Schema for equipment output."""
@@ -22,12 +24,9 @@ class EquipmentSchema(Schema):
 class EquipmentCreateSchema(Schema):
     """Schema for creating equipment."""
     name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
-    type = fields.Str(required=True, validate=validate.OneOf([
-        'kayak', 'sailboat', 'sup', 'motorboat', 'other'
-    ]))
-    status = fields.Str(validate=validate.OneOf([
-        'available', 'reserved', 'maintenance', 'retired'
-    ]), load_default='available')
+    type = fields.Str(required=True, validate=validate.OneOf(enum_values(EquipmentType)))
+    status = fields.Str(validate=validate.OneOf(enum_values(EquipmentStatus)),
+                        load_default=EquipmentStatus.AVAILABLE.value)
     description = fields.Str()
     photo_url = fields.Str(validate=validate.Length(max=500))
     inventory_number = fields.Str(validate=validate.Length(max=50))
@@ -60,8 +59,7 @@ class ReservationCreateSchema(Schema):
     member_id = fields.Int(required=True)
     start_date = fields.DateTime(required=True)
     end_date = fields.DateTime(required=True)
-    status = fields.Str(validate=validate.OneOf([
-        'pending', 'confirmed', 'completed', 'cancelled'
-    ]), load_default='pending')
+    status = fields.Str(validate=validate.OneOf(enum_values(ReservationStatus)),
+                        load_default=ReservationStatus.PENDING.value)
     purpose = fields.Str(validate=validate.Length(max=255))
     notes = fields.Str()
