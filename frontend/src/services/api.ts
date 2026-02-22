@@ -36,8 +36,11 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
-    // If 401 and not already retried, try to refresh token
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip refresh logic for auth endpoints (login, refresh, logout)
+    const isAuthEndpoint = originalRequest.url?.includes('/auth/')
+
+    // If 401 and not already retried and not an auth endpoint, try to refresh token
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true
 
       try {
@@ -51,9 +54,8 @@ api.interceptors.response.use(
         }
         return api(originalRequest)
       } catch (refreshError) {
-        // Refresh failed, clear token and redirect to login
+        // Refresh failed, clear token
         setAccessToken(null)
-        window.location.href = '/login'
         return Promise.reject(refreshError)
       }
     }
