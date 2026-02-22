@@ -162,6 +162,7 @@ if [ "$MODE" = "--setup" ]; then
         python3 python3-pip python3-venv git \
         postgresql postgresql-contrib \
         nginx curl default-jre-headless \
+        nodejs npm \
         > /dev/null
 
     # Configure git safe directory
@@ -180,6 +181,14 @@ if [ "$MODE" = "--setup" ]; then
         source venv/bin/activate
         pip install --upgrade pip -q
         pip install -r requirements.txt -q
+    "
+
+    # Build frontend
+    log_info "Building frontend..."
+    pct exec $LXC_ID -- bash -c "
+        cd $TARGET_DIR/frontend
+        npm install --silent
+        npm run build
     "
 
     # Create PostgreSQL database
