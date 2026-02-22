@@ -9,7 +9,7 @@ import { FinancePage } from '@/pages/Finance'
 import { EquipmentPage } from '@/pages/Equipment'
 import { EventsPage } from '@/pages/Events'
 import { ReportsPage } from '@/pages/Reports'
-import { useAuthProvider, AuthContext } from '@/hooks/useAuth'
+import { useAuth, useAuthProvider, AuthContext } from '@/hooks/useAuth'
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useAuthProvider()
@@ -18,7 +18,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const auth = useAuthProvider()
+  const auth = useAuth()
 
   if (auth.isLoading) {
     return (
