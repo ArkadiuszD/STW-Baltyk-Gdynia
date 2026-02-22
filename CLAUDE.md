@@ -34,15 +34,32 @@ stw/
 │   │   │   └── reports.py       # /api/reports
 │   │   ├── config/
 │   │   │   └── finance_config.py  # Central finance configuration
-│   │   ├── models/              # SQLAlchemy models
+│   │   ├── models/
+│   │   │   ├── base.py          # BaseModel, TimestampMixin
+│   │   │   ├── user.py
+│   │   │   ├── member.py
+│   │   │   └── ...
 │   │   ├── schemas/             # Marshmallow schemas
-│   │   └── services/            # Business logic
-│   ├── migrations/              # Alembic migrations
-│   ├── scripts/
-│   │   └── create_admin.py      # Admin user creation
+│   │   ├── services/
+│   │   │   ├── base.py          # BaseService, SoftDeleteMixin
+│   │   │   ├── member_service.py
+│   │   │   ├── equipment_service.py
+│   │   │   └── ...
+│   │   └── utils/
+│   │       ├── decorators.py    # admin_required, write_permission_required
+│   │       ├── responses.py     # success, error, paginated, etc.
+│   │       └── enums.py         # enum_values helper
+│   ├── db/
+│   │   ├── liquibase/           # Database migrations
+│   │   │   └── changelog/
+│   │   │       └── v1.0.0/      # Version changesets
+│   │   └── install-db.sh        # Liquibase runner
+│   ├── docs/
+│   │   └── BEST_PRACTICES.md    # Coding guidelines
 │   ├── config.py                # Flask config (dev/prod/test)
 │   ├── run.py                   # Application entry point
 │   └── requirements.txt
+├── deploy.sh                    # Git-based deployment script
 ├── frontend/
 │   ├── src/
 │   │   ├── components/          # React components
@@ -161,10 +178,63 @@ tail -f /var/log/stw-baltyk/access.log
 tail -f /var/log/nginx/error.log
 ```
 
-### Deploy Script
+### Deploy Script (Git-based)
 ```bash
-# From Proxmox host
-pct exec 200 -- bash /opt/stw/deploy.sh
+# From Proxmox host (/root/stw/)
+./deploy.sh              # Full deploy (push, pull, pip, restart)
+./deploy.sh --quick      # Quick (skip pip install)
+./deploy.sh --setup      # First-time setup
+./deploy.sh --db         # Run Liquibase migrations
+./deploy.sh --db-drop    # Drop and recreate database
+```
+
+## Abstractions & Best Practices
+
+See `backend/docs/BEST_PRACTICES.md` for complete guidelines.
+
+### BaseModel
+```python
+from app.models.base import BaseModel
+
+class MyModel(BaseModel):
+    __tablename__ = 'my_models'
+    name = db.Column(db.String(100))
+    # id, created_at, updated_at inherited
+```
+
+### BaseService
+```python
+from app.services.base import BaseService
+
+class MemberService(BaseService[Member]):
+    model = Member
+    search_fields = ['first_name', 'last_name', 'email']
+
+# Usage
+service = MemberService()
+result = service.get_all(page=1, search='Kowalski')
+member = service.create({'first_name': 'Jan', ...})
+```
+
+### Decorators
+```python
+from app.utils.decorators import admin_required, write_permission_required
+
+@members_bp.route('', methods=['POST'])
+@jwt_required()
+@write_permission_required
+def create_member():
+    pass
+```
+
+### Response Helpers
+```python
+from app.utils.responses import success, error, paginated, created
+
+return success(data)           # 200
+return created(data)           # 201
+return error('Message')        # 400
+return paginated(items, total, page, per_page, schema)
 ```
 
 ## Testing
