@@ -12,7 +12,7 @@ SQLAlchemy==2.0.27
 
 # Validation and serialization
 marshmallow==3.21.0
-marshmallow-sqlalchemy==0.31.0
+marshmallow-sqlalchemy==1.4.2
 
 # Security
 bcrypt==4.1.2
