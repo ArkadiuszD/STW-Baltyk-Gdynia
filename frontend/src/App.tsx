@@ -9,7 +9,7 @@ import { FinancePage } from '@/pages/Finance'
 import { EquipmentPage } from '@/pages/Equipment'
 import { EventsPage } from '@/pages/Events'
 import { ReportsPage } from '@/pages/Reports'
-import { useAuthProvider, AuthContext, AuthContextType } from '@/hooks/useAuth'
+import { useAuthProvider, AuthContext } from '@/hooks/useAuth'
 
 function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useAuthProvider()

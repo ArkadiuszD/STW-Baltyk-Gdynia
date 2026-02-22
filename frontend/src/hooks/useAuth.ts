@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { User, AuthResponse } from '@/types'
 import { authApi, setAccessToken } from '@/services/api'
 

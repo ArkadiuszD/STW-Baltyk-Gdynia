@@ -112,12 +112,12 @@ export const membersApi = {
     return response.data
   },
 
-  create: async (data: Record<string, unknown>) => {
+  create: async <T extends object>(data: T) => {
     const response = await api.post('/members', data)
     return response.data
   },
 
-  update: async (id: number, data: Record<string, unknown>) => {
+  update: async <T extends object>(id: number, data: T) => {
     const response = await api.put(`/members/${id}`, data)
     return response.data
   },
@@ -156,12 +156,12 @@ export const feesApi = {
     return response.data
   },
 
-  create: async (data: Record<string, unknown>) => {
+  create: async (data: object) => {
     const response = await api.post('/fees', data)
     return response.data
   },
 
-  update: async (id: number, data: Record<string, unknown>) => {
+  update: async (id: number, data: object) => {
     const response = await api.put(`/fees/${id}`, data)
     return response.data
   },
@@ -184,7 +184,7 @@ export const feesApi = {
     return response.data
   },
 
-  createType: async (data: Record<string, unknown>) => {
+  createType: async (data: object) => {
     const response = await api.post('/fees/types', data)
     return response.data
   },
@@ -210,12 +210,12 @@ export const financeApi = {
     return response.data
   },
 
-  createTransaction: async (data: Record<string, unknown>) => {
+  createTransaction: async (data: object) => {
     const response = await api.post('/finance/transactions', data)
     return response.data
   },
 
-  updateTransaction: async (id: number, data: Record<string, unknown>) => {
+  updateTransaction: async (id: number, data: object) => {
     const response = await api.put(`/finance/transactions/${id}`, data)
     return response.data
   },
@@ -245,7 +245,7 @@ export const financeApi = {
     return response.data
   },
 
-  confirmImport: async (transactions: Record<string, unknown>[]) => {
+  confirmImport: async (transactions: object[]) => {
     const response = await api.post('/finance/import/confirm', { transactions })
     return response.data
   },
@@ -273,12 +273,12 @@ export const equipmentApi = {
     return response.data
   },
 
-  create: async (data: Record<string, unknown>) => {
+  create: async (data: object) => {
     const response = await api.post('/equipment', data)
     return response.data
   },
 
-  update: async (id: number, data: Record<string, unknown>) => {
+  update: async (id: number, data: object) => {
     const response = await api.put(`/equipment/${id}`, data)
     return response.data
   },
@@ -317,12 +317,12 @@ export const equipmentApi = {
     return response.data
   },
 
-  createReservation: async (data: Record<string, unknown>) => {
+  createReservation: async (data: object) => {
     const response = await api.post('/equipment/reservations', data)
     return response.data
   },
 
-  updateReservation: async (id: number, data: Record<string, unknown>) => {
+  updateReservation: async (id: number, data: object) => {
     const response = await api.put(`/equipment/reservations/${id}`, data)
     return response.data
   },
@@ -361,12 +361,12 @@ export const eventsApi = {
     return response.data
   },
 
-  create: async (data: Record<string, unknown>) => {
+  create: async (data: object) => {
     const response = await api.post('/events', data)
     return response.data
   },
 
-  update: async (id: number, data: Record<string, unknown>) => {
+  update: async (id: number, data: object) => {
     const response = await api.put(`/events/${id}`, data)
     return response.data
   },
@@ -392,7 +392,7 @@ export const eventsApi = {
   updateParticipant: async (
     eventId: number,
     participantId: number,
-    data: Record<string, unknown>
+    data: object
   ) => {
     const response = await api.put(`/events/${eventId}/participants/${participantId}`, data)
     return response.data
