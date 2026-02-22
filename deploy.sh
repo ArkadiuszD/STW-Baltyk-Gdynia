@@ -31,7 +31,8 @@ set -e
 LXC_ID="${1:-200}"
 MODE="${2:-}"
 TARGET_DIR="/opt/stw"
-GIT_REPO="/mnt/git-repos/stw-baltyk.git"
+GIT_REPO_HOST="/root/git-repos/stw-baltyk.git"      # Path on Proxmox host
+GIT_REPO_LXC="/mnt/git-repos/stw-baltyk.git"        # Path inside LXC (via mount)
 LOCAL_REMOTE="local"
 
 # Handle mode as first argument
@@ -82,11 +83,11 @@ log_info "Mode: ${MODE:-default}"
 # ─────────────────────────────────────────────────────────────────────────────
 # Ensure bare repo exists
 # ─────────────────────────────────────────────────────────────────────────────
-if [ ! -d "$GIT_REPO" ]; then
+if [ ! -d "$GIT_REPO_HOST" ]; then
     log_step "Creating bare git repo"
-    mkdir -p "$(dirname $GIT_REPO)"
-    git init --bare "$GIT_REPO"
-    log_success "Created $GIT_REPO"
+    mkdir -p "$(dirname $GIT_REPO_HOST)"
+    git init --bare "$GIT_REPO_HOST"
+    log_success "Created $GIT_REPO_HOST"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -105,7 +106,7 @@ fi
 
 # Add local remote if needed
 if ! git remote get-url $LOCAL_REMOTE &>/dev/null; then
-    git remote add $LOCAL_REMOTE "$GIT_REPO"
+    git remote add $LOCAL_REMOTE "$GIT_REPO_HOST"
 fi
 
 # Check for uncommitted changes
@@ -164,12 +165,12 @@ if [ "$MODE" = "--setup" ]; then
         > /dev/null
 
     # Configure git safe directory
-    pct exec $LXC_ID -- git config --global --add safe.directory $GIT_REPO
+    pct exec $LXC_ID -- git config --global --add safe.directory $GIT_REPO_LXC
 
     # Clone repository
     log_info "Cloning repository..."
     pct exec $LXC_ID -- rm -rf $TARGET_DIR
-    pct exec $LXC_ID -- git clone $GIT_REPO $TARGET_DIR --quiet
+    pct exec $LXC_ID -- git clone $GIT_REPO_LXC $TARGET_DIR --quiet
 
     # Setup Python virtual environment
     log_info "Setting up Python environment..."
