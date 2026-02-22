@@ -22,7 +22,7 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=7)
     JWT_TOKEN_LOCATION = ['headers', 'cookies']
     JWT_COOKIE_SECURE = False  # Set True in production with HTTPS
-    JWT_COOKIE_CSRF_PROTECT = True
+    JWT_COOKIE_CSRF_PROTECT = False  # Disabled - frontend handles CSRF
     JWT_REFRESH_COOKIE_PATH = '/api/auth/refresh'
 
     # CORS
