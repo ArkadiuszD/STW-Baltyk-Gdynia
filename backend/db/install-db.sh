@@ -103,9 +103,10 @@ drop_database() {
     fi
 
     log_info "Dropping database ${DB_NAME}..."
-    PGPASSWORD="${DB_PASSWORD}" psql -h "${DB_HOST}" -U "${DB_USER}" -d postgres << EOF
+    sudo -u postgres psql << EOF
 DROP DATABASE IF EXISTS ${DB_NAME};
 CREATE DATABASE ${DB_NAME} OWNER ${DB_USER};
+GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};
 EOF
     log_info "Database recreated."
 }
