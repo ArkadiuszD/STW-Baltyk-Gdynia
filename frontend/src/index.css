@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /*
+     * Barwy STW Bałtyk Gdynia
+     * Oficjalne kolory: biało-niebieskie (morskie)
+     * Źródło: materiały promocyjne STW Bałtyk Gdynia
+     */
+    --background: 200 40% 98%; /* Bardzo jasny błękit morski */
+    --foreground: 203 100% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 203 100% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 203 100% 10%;
+    --primary: 197 100% 36%; /* #0077b6 - niebieski morski STW Bałtyk */
+    --primary-foreground: 0 0% 100%; /* biały */
+    --secondary: 200 40% 95%;
+    --secondary-foreground: 203 100% 20%;
+    --muted: 200 30% 96%;
+    --muted-foreground: 200 20% 45%;
+    --accent: 200 50% 92%;
+    --accent-foreground: 203 100% 20%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 200 30% 88%;
+    --input: 200 30% 88%;
+    --ring: 197 100% 36%;
+    --radius: 0.5rem;
+
+    /* Oficjalne kolory STW Bałtyk Gdynia */
+    --baltyk-primary: #0077b6;    /* Niebieski morski - główny */
+    --baltyk-light: #1b77be;      /* Jaśniejszy niebieski */
+    --baltyk-dark: #005b8a;       /* Ciemniejszy niebieski */
+    --baltyk-navy: #003049;       /* Granatowy - akcenty */
+    --baltyk-white: #ffffff;      /* Biały */
+    --baltyk-wave: #4fc3f7;       /* Turkusowy - fale */
+  }
+
+  .dark {
+    /* Tryb ciemny - barwy Bałtyku Gdynia */
+    --background: 210 50% 8%;
+    --foreground: 210 20% 98%;
+    --card: 210 40% 12%;
+    --card-foreground: 210 20% 98%;
+    --popover: 210 40% 12%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 207 100% 50%; /* jaśniejszy niebieski w dark mode */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 207 30% 20%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 210 30% 18%;
+    --muted-foreground: 210 20% 65%;
+    --accent: 207 40% 22%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 30% 22%;
+    --input: 210 30% 22%;
+    --ring: 207 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

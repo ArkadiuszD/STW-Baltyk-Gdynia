@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="baltykGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1b77be"/>
+      <stop offset="100%" style="stop-color:#005b8a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tło okrągłe -->
+  <circle cx="24" cy="24" r="23" fill="url(#baltykGrad)" stroke="#003049" stroke-width="1"/>
+
+  <!-- Fale -->
+  <path d="M 3 34 Q 12 29, 24 34 T 45 34" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 5 40 Q 14 35, 26 40 T 47 40" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- Kajak -->
+  <ellipse cx="24" cy="22" rx="14" ry="4" fill="#FFFFFF" stroke="#003049" stroke-width="0.5"/>
+  <ellipse cx="24" cy="22" rx="5" ry="2.5" fill="#0077b6"/>
+
+  <!-- Wiosło -->
+  <line x1="14" y1="15" x2="34" y2="29" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- STW tekst -->
+  <text x="24" y="12" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="#FFFFFF">STW</text>
+</svg>

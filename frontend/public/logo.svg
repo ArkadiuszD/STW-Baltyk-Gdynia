@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <!-- Gradient morski STW Bałtyk -->
+    <linearGradient id="baltykGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1b77be"/>
+      <stop offset="50%" style="stop-color:#0077b6"/>
+      <stop offset="100%" style="stop-color:#005b8a"/>
+    </linearGradient>
+    <!-- Gradient fal -->
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFFFFF" stop-opacity="0.3"/>
+      <stop offset="50%" style="stop-color:#FFFFFF" stop-opacity="0.8"/>
+      <stop offset="100%" style="stop-color:#FFFFFF" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tło - okrągła tarcza z gradientem morskim -->
+  <circle cx="100" cy="100" r="95" fill="url(#baltykGradient)" stroke="#003049" stroke-width="4"/>
+
+  <!-- Biała obwódka wewnętrzna -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.5"/>
+
+  <!-- Fale morskie - dolna część -->
+  <path d="M 15 140 Q 40 125, 65 140 T 115 140 T 165 140 T 200 140"
+        fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 5 155 Q 30 140, 55 155 T 105 155 T 155 155 T 205 155"
+        fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <path d="M 15 170 Q 40 155, 65 170 T 115 170 T 165 170 T 200 170"
+        fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+
+  <!-- Kajak - widok z góry -->
+  <ellipse cx="100" cy="95" rx="55" ry="12" fill="#FFFFFF" stroke="#003049" stroke-width="2"/>
+  <!-- Dziób kajaka -->
+  <path d="M 155 95 Q 170 95, 165 90 Q 160 85, 155 95" fill="#FFFFFF" stroke="#003049" stroke-width="1.5"/>
+  <!-- Rufa kajaka -->
+  <path d="M 45 95 Q 30 95, 35 90 Q 40 85, 45 95" fill="#FFFFFF" stroke="#003049" stroke-width="1.5"/>
+
+  <!-- Kokpit kajaka -->
+  <ellipse cx="100" cy="95" rx="18" ry="8" fill="#0077b6" stroke="#003049" stroke-width="1.5"/>
+
+  <!-- Wiosło -->
+  <line x1="60" y1="70" x2="140" y2="120" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <!-- Łopatki wiosła -->
+  <ellipse cx="55" cy="67" rx="12" ry="5" fill="#FFFFFF" stroke="#003049" stroke-width="1" transform="rotate(-25 55 67)"/>
+  <ellipse cx="145" cy="123" rx="12" ry="5" fill="#FFFFFF" stroke="#003049" stroke-width="1" transform="rotate(-25 145 123)"/>
+
+  <!-- Tekst "STW" -->
+  <text x="100" y="45" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" stroke="#003049" stroke-width="0.5">STW</text>
+
+  <!-- Tekst "BAŁTYK" na dole -->
+  <text x="100" y="190" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" letter-spacing="3">BAŁTYK</text>
+</svg>
